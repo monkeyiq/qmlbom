@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Bom
+Exec=/home/user/qmlbom/run.sh
+Icon=/home/user/qmlbom/icon.png
+X-Window-Icon=/home/user/qmlbom/icon.png
+X-Window-Icon-Dimmed=/home/user/qmlbom/icon.png
