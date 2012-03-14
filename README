@@ -1,0 +1,7 @@
+
+Place this into /home/user/qmlbom on the device
+
+run as root to create the icon
+desktop-file-install qmldeluge.desktop
+
+click the icon and have fun!
