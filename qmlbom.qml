@@ -171,7 +171,7 @@ Rectangle {
     }
 
     Timer {
-        interval: 6 * 60 * 1000; 
+        interval: 3 * 60 * 1000; 
 	running: true; repeat: true
         onTriggered: radarTimer()
     }
@@ -274,6 +274,8 @@ Rectangle {
 
     function radarTimer() 
     {
+	obsTimer();
+
 	var id = "66B";
 	var earlbase = "http://www.bom.gov.au/radar/IDR" + id + ".T.";
 	// new image each 6 minutes;
