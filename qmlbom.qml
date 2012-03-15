@@ -121,6 +121,9 @@ Rectangle {
 		}
 	    }
 	    Row {
+		Image {
+		    source: "images/uv.png"
+		}
 		Text { 
  		    width: 30;
 		    id: uvmax
@@ -179,7 +182,6 @@ Rectangle {
     function timer() 
     {
 	var data;
-
 	status.text = "Updated at:" + Date().toString();
     }
 
@@ -189,7 +191,6 @@ Rectangle {
 	status.text = "started";
 
 	radarTimer();
-	obsTimer();
 	timer();
 	forecasts();
     }
@@ -250,48 +251,39 @@ Rectangle {
 ///	var a = myTxt.split(',');
     }
 
-    function obsTimer() 
-    {
-	var id = "663";
-	var earlbase = "http://www.bom.gov.au/radar/IDR" + id + ".observations.";
-	var d = new Date();
-	if( d.getMinutes() < 8 ) 
-	{
-	    d.setHours( d.getHours() - 1 );
-	    d.setMinutes( 7, 0, 0 );
-	}
-	else 
-	{
-	    d.setMinutes( 7, 0, 0 );
-	}
-	var dutc = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),  d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
-	var tstr = Strftime.strftime( "%Y%m%d%H%M", dutc ); 
-	var earl = earlbase + tstr + ".png";
-	console.log( "obs.earl:" + earl );
-	obs.source = earl;
-	obstime.text = Strftime.strftime( "%d, %H:%M", d ); 
-    }
-
+    //
+    // This does radar and obs by scraping the URLs from the main page
+    //
     function radarTimer() 
     {
-	obsTimer();
-
 	var id = "66B";
-	var earlbase = "http://www.bom.gov.au/radar/IDR" + id + ".T.";
-	// new image each 6 minutes;
-	var releaseWindow = 6 * 60 * 1000;  
+        var doc = new XMLHttpRequest();
+	doc.onreadystatechange = function() {
+            if (doc.readyState == XMLHttpRequest.HEADERS_RECEIVED) {
+                var status = doc.status;
+		console.log('status', status)
+	    }
+	    if (doc.readyState == XMLHttpRequest.DONE) {
+		console.log( "RADAR ready" );
+                var data = doc.responseText;
+                var contentType = doc.getResponseHeader("Content-Type");
+		var earl = "";
+		
+		earl = "http://www.bom.gov.au/" + data.match(/[\s\S]*theImageNames\[5\] = "(.radar.IDR.*\.T\..*png)/m)[1];
+		console.log( "RADAR EARL:" + earl );
+		radar.source = earl;
+		var d = new Date();
+		maptime.text = Strftime.strftime( "%d, %H:%M", d ); 
 
-	var d = new Date();
-	d.setMinutes( 6 * (Math.floor( (d.getMinutes()-10) / 6 )), 
-		      0, 0 );
-
-	var dutc = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),  d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
-	var tstr = Strftime.strftime( "%Y%m%d%H%M", dutc ); 
-	var earl = earlbase + tstr + ".png";
-
-	console.log( "earl:" + earl );
-	radar.source = earl;
-	maptime.text = Strftime.strftime( "%d, %H:%M", d ); 
+		earl = "http://www.bom.gov.au/" + data.match(/[\s\S]*(.radar.IDR.*observations.*png)/m)[1];
+		console.log( "obs earl:" + earl );
+		obs.source = earl;
+		var d = new Date();
+		obstime.text = Strftime.strftime( "%d, %H:%M", d ); 
+	    }
+	}
+        doc.open("GET", "http://www.bom.gov.au/products/IDR" + id + ".loop.shtml");
+        doc.send();
     }
 
 }
