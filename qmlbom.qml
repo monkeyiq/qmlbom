@@ -179,6 +179,12 @@ Rectangle {
         onTriggered: radarTimer()
     }
 
+    Timer {
+        interval: 60 * 60 * 1000; 
+	running: true; repeat: true
+        onTriggered: forecasts()
+    }
+
     function timer() 
     {
 	var data;
@@ -229,9 +235,7 @@ Rectangle {
 		todaymax.text  = fmax;
 		uvtimes.text   = fuvtimes;
 		uvmax.text     = fuvmax;
-//		var tom = m.match(/class="dated[\s\S]*<em class="max">([0-9]*)/m);
 		var tom = m.match(/class="dated[\s\S]*summary">([^<]*)[\s\S]*<em class="min">([0-9]*)[\s\S]*<em class="max">([0-9]*)/m);
-//		var tom = m.match(/class="dated[\s\S]*summary">(.*)dd[\s\S]*<em class="max">([0-9]*)/m);
 		var ff   = tom[1];
 		var fmin = tom[2];
 		var fmax = tom[3];
