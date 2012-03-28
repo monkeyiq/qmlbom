@@ -1,9 +1,11 @@
 
 import QtQuick 1.1
+import QtWebKit 1.0
 import "script"
 import "script/ajaxmee.js"    as Ajaxmee
 import "script/array2json.js" as ArrayToJson
 import "script/strftime.js"   as Strftime
+//import "http://api.simile-widgets.org/timeplot/1.1/timeplot-api.js" as Timeplot
 
 Rectangle {
     id: container
@@ -165,6 +167,122 @@ Rectangle {
 		    wrapMode: Text.WordWrap
 		}
 	    }
+// 	    Row {
+// 		WebView {
+// 		    id: webView;
+// 		    settings.javascriptEnabled: true;
+
+// 		    javaScriptWindowObjects: QtObject {
+// 			WebView.windowObjectName: "qml"
+
+// 			function qmlCall() {
+// 			    console.log("This call is in QML!");
+// 			}
+
+// 		    }
+
+// 		    onAlert: console.log(message);
+
+// 		    onLoadFinished: {
+// 			console.log("loaded.");
+// 			evaluateJavaScript("alert('test!')");
+// 			console.log("document = " + webView.evaluateJavaScript("document"))
+// 			console.log("field = " + webView.evaluateJavaScript("document.getElementById('my-timeplot')"))
+// 			console.log("tt = " + webView.evaluateJavaScript("document.getElementById('onLoad')"))
+// 			console.log("tt2 = " + webView.evaluateJavaScript("document.getElementById('onLoad()')"))
+			
+// 			// var eventSource = new Timeplot.DefaultEventSource();
+// 			// console.log("tt3");
+// 			// console.log("onLF...5");
+// 			// var plotInfo = [
+// 			//     Timeplot.createPlotInfo({
+// 			// 	id: "plot1",
+// 			// 	dataSource: new Timeplot.ColumnSource(eventSource,1)
+// 			//     })
+// 			// ];
+
+// 			webView.evaluateJavaScript("eval('onLoad();')");
+
+			
+// 			console.log("onLF...end");
+			
+// 		    }
+// //		    onLoadFinished: onLF();
+// //console.log("onLoadFinished....................!");
+
+// // 		    function onLF() {
+// // 			console.log("onLF...");
+// // 			console.log("onLF...2");
+// // 			webView.evaluateJavaScript('console.log("THIS IS IN WEBKIT AAA!");');
+// // 			console.log("onLF...3");
+// // 			evaluateJavaScript('console.log("THIS IS IN WEBKIT AAA!");');
+// // 			console.log("onLF...4");
+// // 			evaluateJavaScript('alert("THIS IS IN WEBKIT AAA!");');
+// // //			webView.evaluateJavaScript('onLoad();');
+
+
+// // 		    }
+
+// 		    width: 300
+// 		    height: 300
+// 		    html: '
+// <head>
+
+// <script src="http://api.simile-widgets.org/timeplot/1.1/timeplot-api.js"  type="text/javascript"></script>
+
+// <script>
+//   console.log("THIS IS IN WEBKIT!"); 
+//   window.qml.qmlCall();
+
+
+// var timeplot;
+
+// function onLoad() {
+//   alert("............ONLOAD()..."); 
+//   var eventSource = new Timeplot.DefaultEventSource();
+//   var plotInfo = [
+//     Timeplot.createPlotInfo({
+//       id: "plot1",
+//       dataSource: new Timeplot.ColumnSource(eventSource,1),
+//       valueGeometry: new Timeplot.DefaultValueGeometry({
+//         gridColor: "#000000",
+//         axisLabelsPlacement: "left",
+//         min: 0,
+//         max: 100
+//       })
+//     })
+//   ];
+  
+//   timeplot = Timeplot.create(document.getElementById("my-timeplot"), plotInfo);
+// //  timeplot.loadText("data.txt", ",", eventSource);
+//   timeplot.loadText("http://www.simile-widgets.org/timeplot/examples/bush/bush_ratings.txt", ",", eventSource);
+
+//   //eventSource.loadText("2009-01-12,27,67,6\\n2001-03-04,57,22,21","","");
+
+
+//   alert("Loading data.txt..."); 
+// }
+
+// var resizeTimerID = null;
+// function onResize() {
+//     alert("onResize()..."); 
+//     if (resizeTimerID == null) {
+//         resizeTimerID = window.setTimeout(function() {
+//             resizeTimerID = null;
+//             timeplot.repaint();
+//         }, 100);
+//     }
+// }
+
+// </script>
+
+//   </head>
+//   <body onload="onLoad();" onresize="onResize();">
+//      <div id="my-timeplot" style="height: 150px; "></div>
+//   </body>
+// '
+// 		}
+// 	    }
 	}
     }
 
@@ -226,7 +344,7 @@ Rectangle {
 		var ftoday   = m.match("<p>([^<]*)</p>")[1];
 		var fmax     = m.match(/<em class="max">([0-9]*)/)[1];
 		var fuvtimes = m.match(/<p class="alert">UV Alert from([^,]*)/)[1];
-		var fuvmax   = m.match(/<p class="alert">[\s\S]*reach[^0-9]*([0-9]+) \[/)[1];
+		var fuvmax   = m.match(/<p class="alert">[\s\S]*reach[^0-9]*([0-9]+)/m)[1];
 
 		console.log("today:" + ftoday + " fmax:" + fmax );
 		console.log("fuvmax:" + fuvmax );
